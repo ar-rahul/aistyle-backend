@@ -4,13 +4,23 @@ import express from "express";
 import dotenv from "dotenv";
 import adminRoutes from "./routes/admin.routes.js";
 import { connectDB } from "./config/db.js";
+import cors from "cors";
+
+import publicRoutes from "./routes/public.routes.js";
+
+
 
 dotenv.config();
 
 console.log("OpenAI key loaded:", !!process.env.OPENAI_API_KEY);
 
 const app = express();
+app.use(cors());
+
 app.use(express.json());
+
+app.use("/public", publicRoutes);
+
 
 // IMPORTANT: await DB connection
 await connectDB();
