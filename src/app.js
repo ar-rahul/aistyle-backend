@@ -18,7 +18,7 @@ const app = express();
 app.use(cors({
   origin: [
     "https://aistyle-client.pages.dev",
-    "https://aistyle.architectureinterface.in",
+    "https://styles.architectureinterface.in",
     "https://aiadmin.architectureinterface.in"
   ],
   methods: ["GET", "POST"],
