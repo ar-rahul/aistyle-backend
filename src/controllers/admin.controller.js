@@ -5,8 +5,6 @@ import { embedText } from "../services/embedding.service.js";
 import SurveyResult from "../models/SurveyResult.js";
 
 
-import SurveyResult from "../models/SurveyResult.js";
-
 /* ============================
    List all survey reports
 ============================ */
