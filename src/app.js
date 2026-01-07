@@ -15,7 +15,14 @@ dotenv.config();
 console.log("OpenAI key loaded:", !!process.env.OPENAI_API_KEY);
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://aiclient.architectureinterface.in",
+    "https://aiadmin.architectureinterface.in"
+  ],
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(express.json());
 
