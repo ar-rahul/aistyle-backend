@@ -6,35 +6,26 @@ import SurveyResult from "../models/SurveyResult.js";
 
 
 export async function listSurveys(req, res) {
-  try {
-    const { name, from, to } = req.query;
+  const { name, from, to, limit = 20 } = req.query;
 
-    const query = {};
+  const query = {};
 
-    /* -------- name filter -------- */
-    if (name) {
-      query.name = { $regex: `^${name}$`, $options: "i" };
-    }
-
-    /* -------- date filter -------- */
-    if (from || to) {
-      query.createdAt = {};
-      if (from) query.createdAt.$gte = new Date(from);
-      if (to) query.createdAt.$lte = new Date(to);
-    }
-
-    const results = await SurveyResult.find(query)
-      .sort({ createdAt: -1 })
-      .limit(200);
-
-    res.json({
-      count: results.length,
-      results
-    });
-  } catch (err) {
-    console.error("❌ admin list error:", err);
-    res.status(500).json({ error: "Internal server error" });
+  if (name) {
+    query.name = { $regex: name, $options: "i" };
   }
+
+  if (from || to) {
+    query.createdAt = {};
+    if (from) query.createdAt.$gte = new Date(from);
+    if (to) query.createdAt.$lte = new Date(to);
+  }
+
+  const results = await SurveyResult
+    .find(query)
+    .sort({ createdAt: -1 })
+    .limit(Number(limit));
+
+  res.json(results);
 }
 
 
