@@ -39,11 +39,10 @@ export async function submitSurvey(req, res) {
 export async function listPublicImages(req, res) {
   try {
     const images = await Image.find(
-      { visible: true },          // optional safety
+      {}, // ← no filter until you add visibility properly
       {
-        url: 1,
-        analysis: 1,
-        _id: 1
+        imageUrl: 1,
+        analysis: 1
       }
     ).lean();
 
