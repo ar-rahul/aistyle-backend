@@ -2,6 +2,41 @@ import { analyzeArchitecture } from "../services/ai.service.js";
 import Image from "../models/Image.js";
 import { uploadImage } from "../services/storage.service.js";
 import { embedText } from "../services/embedding.service.js";
+import SurveyResult from "../models/SurveyResult.js";
+
+
+export async function listSurveys(req, res) {
+  try {
+    const { name, from, to } = req.query;
+
+    const query = {};
+
+    /* -------- name filter -------- */
+    if (name) {
+      query.name = { $regex: `^${name}$`, $options: "i" };
+    }
+
+    /* -------- date filter -------- */
+    if (from || to) {
+      query.createdAt = {};
+      if (from) query.createdAt.$gte = new Date(from);
+      if (to) query.createdAt.$lte = new Date(to);
+    }
+
+    const results = await SurveyResult.find(query)
+      .sort({ createdAt: -1 })
+      .limit(200);
+
+    res.json({
+      count: results.length,
+      results
+    });
+  } catch (err) {
+    console.error("❌ admin list error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 
 export async function uploadImageController(req, res) {
   try {

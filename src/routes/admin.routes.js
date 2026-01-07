@@ -14,6 +14,8 @@ const upload = multer();
 router.use(adminAuth); 
 
 
+router.get("/surveys", adminAuth, listSurveys);
+
 // upload image
 router.post("/upload", upload.single("image"), uploadImageController);
 
