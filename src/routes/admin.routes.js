@@ -4,7 +4,11 @@ import Image from "../models/Image.js";
 import { uploadImageController } from "../controllers/admin.controller.js";
 import { deleteFromFirebase } from "../services/storage.service.js";
 import { adminAuth } from "../middleware/adminAuth.js";
-import { listSurveys } from "../controllers/admin.controller.js";
+
+import {
+  listSurveys,
+  getSurvey
+} from "../controllers/admin.controller.js";
 
 
 
@@ -16,6 +20,8 @@ router.use(adminAuth);
 
 
 router.get("/surveys", adminAuth, listSurveys);
+router.get("/surveys/:id", adminAuth, getSurvey);
+
 
 // upload image
 router.post("/upload", upload.single("image"), uploadImageController);

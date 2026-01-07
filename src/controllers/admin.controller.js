@@ -5,28 +5,49 @@ import { embedText } from "../services/embedding.service.js";
 import SurveyResult from "../models/SurveyResult.js";
 
 
+import SurveyResult from "../models/SurveyResult.js";
+
+/* ============================
+   List all survey reports
+============================ */
 export async function listSurveys(req, res) {
-  const { name, from, to, limit = 20 } = req.query;
+  try {
+    const surveys = await SurveyResult.find(
+      {},
+      {
+        name: 1,
+        meta: 1,
+        createdAt: 1
+      }
+    )
+      .sort({ createdAt: -1 })
+      .lean();
 
-  const query = {};
-
-  if (name) {
-    query.name = { $regex: name, $options: "i" };
+    res.json(surveys);
+  } catch (err) {
+    console.error("❌ listSurveys:", err);
+    res.status(500).json({ error: "Failed to load surveys" });
   }
-
-  if (from || to) {
-    query.createdAt = {};
-    if (from) query.createdAt.$gte = new Date(from);
-    if (to) query.createdAt.$lte = new Date(to);
-  }
-
-  const results = await SurveyResult
-    .find(query)
-    .sort({ createdAt: -1 })
-    .limit(Number(limit));
-
-  res.json(results);
 }
+
+/* ============================
+   Get one survey report
+============================ */
+export async function getSurvey(req, res) {
+  try {
+    const survey = await SurveyResult.findById(req.params.id).lean();
+
+    if (!survey) {
+      return res.status(404).json({ error: "Survey not found" });
+    }
+
+    res.json(survey);
+  } catch (err) {
+    console.error("❌ getSurvey:", err);
+    res.status(500).json({ error: "Failed to load survey" });
+  }
+}
+
 
 
 export async function uploadImageController(req, res) {
