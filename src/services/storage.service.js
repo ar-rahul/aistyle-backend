@@ -1,7 +1,5 @@
 import crypto from "crypto";
 import { bucket } from "../config/firebase.js";
-import admin from "firebase-admin";
-
 
 export async function uploadImage(buffer, filename) {
   const hash = crypto
@@ -10,7 +8,6 @@ export async function uploadImage(buffer, filename) {
     .digest("hex");
 
   const storagePath = `images/${hash}-${filename}`;
-
   const file = bucket.file(storagePath);
 
   await file.save(buffer, {
@@ -20,15 +17,12 @@ export async function uploadImage(buffer, filename) {
 
   return {
     imageUrl: file.publicUrl(),
-    storagePath,  
+    storagePath,
     hash
   };
 }
 
 export async function deleteFromFirebase(storagePath) {
-  const bucket = admin.storage().bucket();
-
-  console.log("🗑️ Attempting Firebase delete:", storagePath);
-
+  console.log("🗑️ Deleting Firebase file:", storagePath);
   await bucket.file(storagePath).delete();
 }

@@ -1,18 +1,21 @@
+import "../bootstrap/env.js"; // ensures dotenv loads FIRST
 import admin from "firebase-admin";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
+  throw new Error("Missing FIREBASE_SERVICE_ACCOUNT env variable");
+}
 
 const serviceAccount = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "firebase-key.json"), "utf8")
+  process.env.FIREBASE_SERVICE_ACCOUNT
 );
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: "aistyle-e5fee.firebasestorage.app"
-});
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    storageBucket: `${serviceAccount.project_id}.appspot.com`
+  });
+}
 
-export const bucket = admin.storage().bucket();
+const bucket = admin.storage().bucket();
+
+export { admin, bucket };
