@@ -1,4 +1,6 @@
 import SurveyResult from "../models/SurveyResult.js";
+import Image from "../models/Image.js";
+
 
 export async function submitSurvey(req, res) {
   try {
@@ -31,5 +33,23 @@ export async function submitSurvey(req, res) {
   } catch (err) {
     console.error("❌ submitSurvey error:", err);
     res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function listPublicImages(req, res) {
+  try {
+    const images = await Image.find(
+      { visible: true },          // optional safety
+      {
+        url: 1,
+        analysis: 1,
+        _id: 1
+      }
+    ).lean();
+
+    res.json(images);
+  } catch (err) {
+    console.error("❌ listPublicImages:", err);
+    res.status(500).json({ error: "Failed to load images" });
   }
 }
