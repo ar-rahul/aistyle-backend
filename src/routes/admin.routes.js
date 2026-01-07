@@ -3,9 +3,16 @@ import multer from "multer";
 import Image from "../models/Image.js";
 import { uploadImageController } from "../controllers/admin.controller.js";
 import { deleteFromFirebase } from "../services/storage.service.js";
+import { adminAuth } from "../middleware/adminAuth.js";
+
+
 
 const router = express.Router();
 const upload = multer();
+
+
+router.use(adminAuth); 
+
 
 // upload image
 router.post("/upload", upload.single("image"), uploadImageController);
