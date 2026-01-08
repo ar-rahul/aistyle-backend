@@ -17,7 +17,7 @@ console.log("OpenAI key loaded:", !!process.env.OPENAI_API_KEY);
 const app = express();
 app.use(cors({
   origin: [
-    "http://localhost:5173/",
+    "http://localhost:5173",
     "https://aistyle-client.pages.dev",
     "https://styles.architectureinterface.in",
     "https://aiadmin.architectureinterface.in"
