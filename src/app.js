@@ -15,6 +15,7 @@ dotenv.config();
 console.log("OpenAI key loaded:", !!process.env.OPENAI_API_KEY);
 
 const app = express();
+
 app.use(cors({
   origin: [
     "http://localhost:5173",
@@ -22,20 +23,20 @@ app.use(cors({
     "https://styles.architectureinterface.in",
     "https://aiadmin.architectureinterface.in"
   ],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "x-admin-key"]
-  })
-);
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "x-admin-key"
+  ],
+  credentials: true
+}));
+
+app.options("*", cors());   // 👈 REQUIRED
 
 app.use(express.json());
 
 app.use("/public", publicRoutes);
-
-
-// IMPORTANT: await DB connection
 await connectDB();
-
-// routes
 app.use("/admin", adminRoutes);
 
 // health check
