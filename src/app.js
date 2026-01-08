@@ -24,22 +24,17 @@ app.use(cors({
     "https://aiadmin.architectureinterface.in"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: [
-    "Content-Type",
-    "x-admin-key"
-  ],
-  credentials: true
+  allowedHeaders: ["Content-Type", "x-admin-key"]
 }));
-
-app.options("*", cors());   // 👈 REQUIRED
 
 app.use(express.json());
 
 app.use("/public", publicRoutes);
+
 await connectDB();
+
 app.use("/admin", adminRoutes);
 
-// health check
 app.get("/health", (req, res) => {
   res.send("OK");
 });
