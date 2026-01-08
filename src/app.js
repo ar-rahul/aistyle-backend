@@ -24,7 +24,11 @@ app.use(cors({
     "https://aiadmin.architectureinterface.in"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "x-admin-key"]
+  allowedHeaders: [
+    "Content-Type",
+    "x-admin-key",
+    "Authorization"
+  ],
 }));
 
 app.use(express.json());
