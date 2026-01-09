@@ -19,6 +19,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
+    "https://adminui.architectureinterface.in",
     "https://aistyle-client.pages.dev",
     "https://styles.architectureinterface.in",
     "https://aiadmin.architectureinterface.in"
