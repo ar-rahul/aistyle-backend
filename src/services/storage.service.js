@@ -7,6 +7,17 @@ export async function uploadImage(buffer, filename) {
     .update(buffer)
     .digest("hex");
 
+  const existing = await Image.findOne({ hash });
+
+  if (existing) {
+      return res.status(409).json({
+        error: "Duplicate image",
+        message: "This image already exists",
+        imageUrl: existing.imageUrl
+      });
+    }
+
+
   const storagePath = `images/${hash}-${filename}`;
   const file = bucket.file(storagePath);
 
