@@ -23,6 +23,12 @@ const ImageSchema = new mongoose.Schema(
        AI Analysis Output
     ---------------------------- */
     analysis: {
+      space_category: {
+        type: String,
+        enum: ["living", "bedroom"],
+        required: true,
+        index: true
+      },
       movement: {
         type: String
       },

@@ -19,6 +19,7 @@ You are an architectural design expert.
 Analyze the image and return ONLY valid JSON with EXACTLY these fields:
 
 {
+  "space_category": "living" | "bedroom",
   "movement": string,
   "family": string,
   "variant": string,
@@ -28,6 +29,12 @@ Analyze the image and return ONLY valid JSON with EXACTLY these fields:
   "confidence": "low" | "medium" | "high",
   "notes": string
 }
+
+Space category rules:
+- "living" = living room, lounge, family room, common area, open-plan living
+- "bedroom" = any sleeping or resting space
+- Choose the MOST LIKELY category
+- Always choose exactly ONE of the two values
 
 Definitions:
 - movement = broad architectural movement (e.g. Modernism, Postmodernism, Vernacular)
@@ -61,27 +68,35 @@ Rules:
   });
 
   const raw = response.output_text;
-  const parsed = JSON.parse(raw);
+const parsed = JSON.parse(raw);
 
-  return {
-    movement: parsed.movement || "Unknown",
-    family: parsed.family || "Unknown",
-    variant: parsed.variant || "Unknown",
+// Normalize space category
+const spaceCategory =
+  parsed.space_category === "bedroom"
+    ? "bedroom"
+    : "living"; // default fallback
 
-    color_keywords: Array.isArray(parsed.color_keywords)
-      ? parsed.color_keywords
-      : [],
+return {
+  space_category: spaceCategory,
 
-    design_philosophy: parsed.design_philosophy || "",
+  movement: parsed.movement || "Unknown",
+  family: parsed.family || "Unknown",
+  variant: parsed.variant || "Unknown",
 
-    visual_features: Array.isArray(parsed.visual_features)
-      ? parsed.visual_features
-      : [],
+  color_keywords: Array.isArray(parsed.color_keywords)
+    ? parsed.color_keywords
+    : [],
 
-    confidence: ["low", "medium", "high"].includes(parsed.confidence)
-      ? parsed.confidence
-      : "low",
+  design_philosophy: parsed.design_philosophy || "",
 
-    notes: parsed.notes || ""
-  };
+  visual_features: Array.isArray(parsed.visual_features)
+    ? parsed.visual_features
+    : [],
+
+  confidence: ["low", "medium", "high"].includes(parsed.confidence)
+    ? parsed.confidence
+    : "low",
+
+  notes: parsed.notes || ""
+};
 }
