@@ -1,5 +1,7 @@
 import crypto from "crypto";
 import { bucket } from "../config/firebase.js";
+import Image from "../models/Image.js";
+
 
 export async function uploadImage(buffer, filename) {
   const hash = crypto
