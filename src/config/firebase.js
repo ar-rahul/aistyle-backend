@@ -17,5 +17,7 @@ if (!admin.apps.length) {
 }
 
 const bucket = admin.storage().bucket();
+const [exists] = await bucket.exists();
+console.log("🪣 Bucket exists:", exists);
 
 export { admin, bucket };
