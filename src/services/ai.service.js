@@ -70,14 +70,16 @@ Rules:
   const raw = response.output_text;
 const parsed = JSON.parse(raw);
 
-// Normalize space category
-const spaceCategory =
-  parsed.space_category === "bedroom"
-    ? "bedroom"
-    : "living"; // default fallback
+const rawCategory = parsed.space_category?.toLowerCase();
+
+const space_category =
+  rawCategory === "bedroom" ? "bedroom" : "living";
+
+  
+
 
 return {
-  space_category: spaceCategory,
+  space_category,
 
   movement: parsed.movement || "Unknown",
   family: parsed.family || "Unknown",
@@ -99,4 +101,5 @@ return {
 
   notes: parsed.notes || ""
 };
+
 }

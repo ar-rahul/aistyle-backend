@@ -102,6 +102,10 @@ export async function uploadImageController(req, res) {
               )
             : [];
 
+          if (!analysis.space_category) {
+  analysis.space_category = "living";
+}
+
           image.analysis = analysis;
           image.embeddings = {
             variant: variantEmbedding,
