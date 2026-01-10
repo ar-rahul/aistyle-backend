@@ -75,11 +75,14 @@ export async function uploadImageController(req, res) {
       }
 
       image = await Image.create({
-        imageUrl,
-        storagePath,
-        hash,
-        analyzed: false
-      });
+  imageUrl,
+  storagePath,
+  hash,
+  analyzed: false,
+  analysis: {
+    space_category: "living" // temporary placeholder
+  }
+});
 
       createdImages.push(image);
 
