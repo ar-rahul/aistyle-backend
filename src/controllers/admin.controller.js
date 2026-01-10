@@ -1,3 +1,53 @@
+import { analyzeArchitecture } from "../services/ai.service.js";
+import Image from "../models/Image.js";
+import { uploadImage } from "../services/storage.service.js";
+import { embedText } from "../services/embedding.service.js";
+import SurveyResult from "../models/SurveyResult.js";
+
+
+/* ============================
+   List all survey reports
+============================ */
+export async function listSurveys(req, res) {
+  try {
+    const surveys = await SurveyResult.find(
+      {},
+      {
+        name: 1,
+        meta: 1,
+        createdAt: 1
+      }
+    )
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.json(surveys);
+  } catch (err) {
+    console.error("❌ listSurveys:", err);
+    res.status(500).json({ error: "Failed to load surveys" });
+  }
+}
+
+/* ============================
+   Get one survey report
+============================ */
+export async function getSurvey(req, res) {
+  try {
+    const survey = await SurveyResult.findById(req.params.id).lean();
+
+    if (!survey) {
+      return res.status(404).json({ error: "Survey not found" });
+    }
+
+    res.json(survey);
+  } catch (err) {
+    console.error("❌ getSurvey:", err);
+    res.status(500).json({ error: "Failed to load survey" });
+  }
+}
+
+
+
 export async function uploadImageController(req, res) {
   try {
     const files = req.files ?? (req.file ? [req.file] : []);
@@ -87,3 +137,4 @@ export async function uploadImageController(req, res) {
     res.status(500).json({ error: "Upload failed" });
   }
 }
+
