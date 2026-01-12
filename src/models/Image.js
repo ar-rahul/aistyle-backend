@@ -92,7 +92,7 @@ const ImageSchema = new mongoose.Schema(
 
     isVisible: {
       type: Boolean,
-      default: false,
+      default: true,
       index: true
     },
 
