@@ -24,7 +24,7 @@ app.use(cors({
     "https://styles.architectureinterface.in",
     "https://aiadmin.architectureinterface.in"
   ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: [
     "Content-Type",
     "x-admin-key",
