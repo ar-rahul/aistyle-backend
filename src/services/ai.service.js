@@ -6,7 +6,7 @@ export async function analyzeArchitecture(imageUrl) {
   });
 
   const response = await client.responses.create({
-    model: "gpt-4.1-mini",
+    model: "gpt-5.2",
     input: [
       {
         role: "user",

@@ -145,3 +145,32 @@ export async function uploadImageController(req, res) {
   }
 }
 
+/* ============================
+   Toggle image visibility
+============================ */
+export async function updateImageVisibility(req, res) {
+  try {
+    const { id } = req.params;
+    const { isVisible } = req.body;
+
+    if (typeof isVisible !== "boolean") {
+      return res.status(400).json({ error: "isVisible must be boolean" });
+    }
+
+    const image = await Image.findByIdAndUpdate(
+      id,
+      { isVisible },
+      { new: true }
+    );
+
+    if (!image) {
+      return res.status(404).json({ error: "Image not found" });
+    }
+
+    res.json(image);
+  } catch (err) {
+    console.error("❌ updateImageVisibility:", err);
+    res.status(500).json({ error: "Failed to update visibility" });
+  }
+}
+

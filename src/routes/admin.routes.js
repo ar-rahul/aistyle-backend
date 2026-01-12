@@ -6,6 +6,8 @@ import { uploadImageController } from "../controllers/admin.controller.js";
 import { listSurveys, getSurvey } from "../controllers/admin.controller.js";
 import { deleteFromFirebase } from "../services/storage.service.js";
 import { adminAuth } from "../middleware/adminAuth.js";
+import { updateImageVisibility } from "../controllers/admin.controller.js";
+
 
 const router = express.Router();
 const upload = multer();
@@ -60,6 +62,22 @@ router.delete("/images/:id", async (req, res) => {
     console.error("❌ DELETE ROUTE CRASHED:", err);
     res.status(500).json({ error: "Delete failed" });
   }
+});
+
+
+/* =========================
+   VISIBILITY CONTROL
+========================= */
+
+// toggle visibility
+router.patch("/images/:id/visibility", updateImageVisibility);
+
+// visible-only images (for VisibilityPage)
+router.get("/images-visible", async (req, res) => {
+  const images = await Image.find({ isVisible: true })
+    .sort({ createdAt: -1 });
+
+  res.json(images);
 });
 
 export default router;

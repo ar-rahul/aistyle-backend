@@ -90,6 +90,12 @@ const ImageSchema = new mongoose.Schema(
       default: false
     },
 
+    isVisible: {
+      type: Boolean,
+      default: false,
+      index: true
+    },
+
     createdAt: {
       type: Date,
       default: Date.now
